@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         forpassword = findViewById(R.id.password);
         showpassword = findViewById(R.id.showpassword);
         intent = new Intent(this, NextActivity.class);
-        intent.putExtra("email", mAuth.getCurrentUser().getEmail());
         Button signup = findViewById(R.id.signup);
         Button forlogin = findViewById(R.id.login);
         signup.setVisibility(View.VISIBLE);
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+                                intent.putExtra("email", mAuth.getCurrentUser().getEmail());
                                 startActivity(intent);
                                 finish();
                             } else {
