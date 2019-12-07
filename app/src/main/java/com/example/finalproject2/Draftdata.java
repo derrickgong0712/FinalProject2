@@ -16,11 +16,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Draftdata extends AppCompatActivity {
     private String[] legends = new String[] {"AXE", "ANTIMAGE", "VOID", "TINKER", "WINDRANGER"};
@@ -40,6 +39,8 @@ public class Draftdata extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     private DatabaseReference mRef;
+
+    private List<ArrayList> getarray;
 
     private ArrayList<ArrayList> axe = new ArrayList<ArrayList>(){};
 
@@ -65,6 +66,7 @@ public class Draftdata extends AppCompatActivity {
         Button back = findViewById(R.id.back);
         Intent intent = getIntent();
         email = intent.getStringExtra("email");
+        getarray = new ArrayList<>();
         ArrayAdapter x = new ArrayAdapter(this, android.R.layout.simple_spinner_item, legends);
         x.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         legend.setAdapter(x);
@@ -110,23 +112,51 @@ public class Draftdata extends AppCompatActivity {
         });
 
     }
-    /*
+
     @Override
     protected void onStart() {
         super.onStart();
-        mRef.addValueEventListener(new ValueEventListener() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                axe.clear();
+                tinker.clear();
+                windranger.clear();
+                antimage.clear();
+                vod.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Object x =  data.getValue();
+                    if (x instanceof ArrayList) {
+                            ArrayList<ArrayList<Double>> y = (ArrayList<ArrayList<Double>>) x;
+                        if (data.getKey().equals("AXE")) {
+                            axe.addAll(y);
+                        }
+                        if (data.getKey().equals("TINKER")) {
+                            tinker.addAll(y);
+                        }
+                        if (data.getKey().equals("WINDRANGER")) {
+                            windranger.addAll(y);
+                        }
+                        if (data.getKey().equals("VOID")) {
+                            vod.addAll(y);
+                        }
+                        if (data.getKey().equals("ANTIMAGE")) {
+                            antimage.addAll(y);
+                        }
+                    }
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
     }
-    */
+
+
+
+
+
     private void uploadclicked() {
         if (selection.equals("AXE")) {
             mRef = mDatabase.child(selection);
