@@ -36,11 +36,22 @@ public class Analysis extends AppCompatActivity {
 
     private ArrayList<Double> array = new ArrayList<Double>(){};
 
+    TextView first;
+    TextView second;
+    TextView third;
+    TextView fourth;
+    TextView fifth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
+        first = findViewById(R.id.first);
+        second = findViewById(R.id.second);
+        third = findViewById(R.id.third);
+        fourth = findViewById(R.id.fourth);
+        fifth = findViewById(R.id.fifth);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Button get = findViewById(R.id.get);
         get.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +88,7 @@ public class Analysis extends AppCompatActivity {
                         }
                     }
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -118,11 +130,8 @@ public class Analysis extends AppCompatActivity {
     }
 
     private void startget() {
-        TextView first = findViewById(R.id.first);
-        TextView second = findViewById(R.id.second);
-        TextView third = findViewById(R.id.third);
-        TextView fourth = findViewById(R.id.fourth);
-        TextView fifth = findViewById(R.id.fifth);
+        array.clear();
+        kda.clear();
         kda.put(getaverage(axe), "AXE");
         kda.put(getaverage(tinker), "TINKER");
         kda.put(getaverage(antimage), "ANTIMAGE");
@@ -134,12 +143,15 @@ public class Analysis extends AppCompatActivity {
         array.add(getaverage(antimage));
         array.add(getaverage(windranger));
         sort(array);
-        first.setText(kda.get(array.get(0)) + " : " + array.get(0).toString());
-        second.setText(kda.get(array.get(1)) + " : " + array.get(1).toString());
-        third.setText(kda.get(array.get(2)) + " : " + array.get(2).toString());
-        fourth.setText(kda.get(array.get(3)) + " : " + array.get(3).toString());
-        fifth.setText(kda.get(array.get(4)) + " : " + array.get(4).toString());
-
+        first.setText(kda.get(array.get(0)) + " : " + roundDown5(array.get(0)).toString());
+        second.setText(kda.get(array.get(1)) + " : " + roundDown5(array.get(1)).toString());
+        third.setText(kda.get(array.get(2)) + " : " + roundDown5(array.get(2)).toString());
+        fourth.setText(kda.get(array.get(3)) + " : " + roundDown5(array.get(3)).toString());
+        fifth.setText(kda.get(array.get(4)) + " : " + roundDown5(array.get(4)).toString());
+    }
+    public static Double roundDown5(Double number) {
+        double real = (double) number;
+        return ((long)(real * 1e5)) / 1e5;
     }
 
 }
